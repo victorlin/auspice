@@ -423,12 +423,12 @@ EntropyChart.prototype._calcOffsets = function _calcOffsets(width, height) {
 EntropyChart.prototype._addBrush = function _addBrush() {
   this.brushed = function brushed() {
     /* this block called when the brush is manipulated */
-    const s = d3event.selection || this.scales.xNav.range();
+    const s = d3event?.selection || this.scales.xNav.range();
     // console.log("brushed", s); // , this.scales);
     // console.log("brushed", s.map(this.scales.xNav.invert, this.scales.xNav))
     const start_end = s.map(this.scales.xNav.invert, this.scales.xNav);
     this.zoomCoordinates = start_end.map(Math.round);
-    if (!d3event.selection) { /* This keeps brush working if user clicks (zoom out entirely) rather than click-drag! */
+    if (!d3event?.selection) { /* This keeps brush working if user clicks (zoom out entirely) rather than click-drag! */
       this.navGraph.select(".brush")
         .call(this.brush.move, () => {
           this.zoomCoordinates = this.scales.xNav.range().map(Math.round);
