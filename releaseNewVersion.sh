@@ -57,14 +57,7 @@ if [ ${packagesVersion} != ${srcVersion} ]
 fi
 parts=(${srcVersion//./ }) # magic
 bumps=($((${parts[0]}+1)) $((${parts[1]}+1)) $((${parts[2]}+1)))
-echo -e "\nCurrent version: ${srcVersion}. Is this a major new release (${bumps[0]}.0.0), a feature release (${parts[0]}.${bumps[1]}.0) or a minor fix (${parts[0]}.${parts[1]}.${bumps[2]})?\n"
-select yn in "major-new-release" "feature-release" "minor-fix"; do
-    case $yn in
-        major-new-release ) msg="major new release"; newVersion="${bumps[0]}.0.0"; break;;
-        feature-release ) msg="feature release"; newVersion="${parts[0]}.${bumps[1]}.0"; break;;
-        minor-fix ) msg="minor fix"; newVersion="${parts[0]}.${parts[1]}.${bumps[2]}"; break;;
-    esac
-done
+newVersion=
 echo -e "\n"
 # now replace the version in packages.json and version.js (inplace!)
 perl -pi -e "s/\"version\": \"${packagesVersion}\"/\"version\": \"${newVersion}\"/" package.json
