@@ -1,9 +1,12 @@
 name: Release new version
 
 on:
-  push:
-    branches:
-      - release
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'New version X.X.X'
+        required: true
+        type: string
 
 jobs:
   npm-publish:
@@ -24,3 +27,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: gh workflow run ci.yml --repo nextstrain/docker-base
+  create-github-release:
+    needs: [npm-publish]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.inputs.version}}
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+    - name: Download extract-release-notes.py from Nextclade repo
+      run: curl -OL https://github.com/nextstrain/nextclade/raw/master/scripts/extract-release-notes.py
+    - name: Create GitHub Release
+      run: |
+        python extract-release-notes.py CHANGELOG.md |
+        gh release create \
+          "${{ github.event.inputs.version}}" \
+          --repo nextstrain/auspice \
+          --title "${{ github.event.inputs.version}}" \
+          --target "$(git rev-list -1 ${{ github.event.inputs.version}})" \
+          --notes-file -
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN_NEXTSTRAIN_BOT_WORKFLOW_DISPATCH }}
