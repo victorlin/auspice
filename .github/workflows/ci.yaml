@@ -18,6 +18,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+          cache: 'npm'
       - run: node --version
       # Build is implicit with the "prepare" life cycle script
       - run: npm ci
@@ -32,6 +33,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+          cache: 'npm'
       - run: node --version
       # Note: --ignore-scripts skips an otherwise unnecessary Auspice build, but
       # also skips life cycle scripts for dependencies. If the job fails here,
@@ -49,6 +51,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+          cache: 'npm'
       - run: npm ci
       - run: npm run get-data
       - run: npm run smoke-test:ci
@@ -63,6 +66,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+          cache: 'npm'
       # Note: --ignore-scripts skips an otherwise unnecessary Auspice build, but
       # also skips life cycle scripts for dependencies. If the job fails here,
       # try removing this flag.
@@ -76,6 +80,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'npm'
       # Note: --ignore-scripts skips an otherwise unnecessary Auspice build, but
       # also skips life cycle scripts for dependencies. If the job fails here,
       # try removing this flag.
@@ -89,6 +94,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'npm'
       - run: npm ci
       - run: npx --yes bundlesize
 
@@ -102,6 +108,7 @@ jobs:
           # Node.js version doesn't matter; npm version is more important when
           # it comes to lockfiles.
           node-version: 18
+          cache: 'npm'
       - run: npm install -g npm@8
       - run: npm install --ignore-scripts
       - run: |
@@ -121,6 +128,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'npm'
           registry-url: https://registry.npmjs.org/
       - run: node --version
       - run: npm ci
